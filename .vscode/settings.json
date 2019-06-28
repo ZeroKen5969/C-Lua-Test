@@ -4,6 +4,7 @@
         "lualib.h": "c",
         "lauxlib.h": "c",
         "luaconf.h": "c",
-        "lua.hpp": "cpp"
+        "lua.hpp": "cpp",
+        "stdio.h": "c"
     }
 }

@@ -1,45 +1,48 @@
-#include <stdio.h>
+
+#ifdef __cplusplus
+
+#include "lua.hpp"
+
+#else
 
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
 
-static int test();
+#endif
+
+int luaopen_mylib(lua_State *L);
+static int add(lua_State *L);
+
+static const luaL_Reg mylib[] = {
+    {"add", add},
+    {NULL, NULL}
+};
 
 int main()
 {
     lua_State *L = luaL_newstate();
 
-    luaL_openlibs(L);
-
-    lua_getglobal(L, "print");
-    lua_pushstring(L, "test test test");
-    lua_call(L, 1, 0);
-
-    lua_getglobal(L, "print");
-    lua_pushstring(L, "test test test");
-    lua_call(L, 1, 0);
-
-    lua_getglobal(L, "print");
-    lua_pushstring(L, "test test test");
-    lua_call(L, 1, 0);
-
-    lua_pushcfunction(L, test);
-    lua_setglobal(L, "test");
-    
-    lua_getglobal(L, "test");
-    lua_pushstring(L, "test my my my");
-    lua_call(L, 1, 0);
+    if(luaL_dofile(L, "test.lua")) {
+        perror("Do file error!");
+        return 1;
+    }
 
     lua_close(L);
-    
+
     return 0;
 }
 
-static int test(lua_State *L)
+int luaopen_mylib(lua_State *L)
 {
-    const char *s = lua_tostring(L, 1);
-    printf("%s", s);
+    luaL_newlib(L, mylib);
+    return 1;
+}
 
-    return 0;
+static int add(lua_State *L)
+{
+    int a = luaL_checkinteger(L, 1);
+    int b = luaL_checkinteger(L, 2);
+    lua_pushinteger(L, a + b);
+    return 1;
 }

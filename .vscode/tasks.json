@@ -4,24 +4,35 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "BCSDE",
+            "label": "Build exe",
             "type": "shell",
             "command": "gcc",
             "args": [
-                "-g",
-                "-o",
-                "test",
-                "test.c",
-                "-I",
-                "include",
-                "-L",
-                "lib",
-                "-llua53"
+                "-m32", "-g", "-o", "test", "test.c", 
+                "-I", "include", "-L", "lib", "-llua53"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        }, 
+        {
+            "label": "Build so",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-m32", "-shared", "-o", "libtest.so", "-fPIC", "test.c",
+                "-I", "include", "-L", "lib", "-llua53"
+            ],
+        },
+        {
+            "label": "Build dll",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-m32", "-shared", "-o", "mylib.dll", "-fPIC", "test.c",
+                "-I", "include", "-L", "lib", "-llua53"
+            ],        
         }
     ]
 }
